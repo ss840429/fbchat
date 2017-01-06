@@ -214,7 +214,7 @@ class Client(object):
                 users.append(User(entry))
         return users # have bug TypeError: __repr__ returned non-string (type bytes)
 
-    def send(self, recipient_id, message=None, message_type='user', like=None, image_id=None):
+    def send(self, recipient_id, message=None, message_type='user', sticker_id=None, image_id=None):
         """Send a message with given thread id
 
         :param recipient_id: the user id or thread id that you want to send a message to
@@ -277,12 +277,12 @@ class Client(object):
         if image_id:
             data['image_ids[0]'] = image_id
 
-        if like:
-            try:
-                sticker = LIKES[like.lower()]
-            except KeyError:
-                # if user doesn't enter l or m or s, then use the large one
-                sticker = LIKES['l']
+        if sticker_id:
+            if str(sticker_id).isalpha() and sticker_id.lower() in ('s','m','l'):
+                sticker = LIKES[sticker_id.lower()]
+            else:
+                sticker = sticker_id
+
             data["sticker_id"] = sticker
 
         r = self._post(SendURL, data)
