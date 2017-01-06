@@ -533,7 +533,9 @@ class Client(object):
                         mid =     m['delta']['messageMetadata']['messageId']
                         message = m['delta'].get('body','')
                         fbid =    m['delta']['messageMetadata']['actorFbId']
-                        name =    None
+                        
+                        friend = self.getUserInfo(fbid)
+                        name = friend.get('name')
                         self.on_message(mid, fbid, name, message, m)
                 else:
                     if self.debug:
